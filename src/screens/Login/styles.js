@@ -13,11 +13,11 @@ export const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       paddingVertical: 20,
-      top: "10%",
+      top: "8%",
     },
     logoImage: {
       height: 80,
-      width: 250,
+      width: 240,
     },
     inputContainer: {
       marginTop: 100,

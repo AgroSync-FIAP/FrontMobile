@@ -13,7 +13,7 @@ export default function Home({ navigation }) {
 
   return (
     <Image
-      source={require("../../../assets/HomeYellow.gif")}
+      source={require("../../../assets/homeYellow.png")}
       resizeMode="stretch"
       style={styles.container} 
     />

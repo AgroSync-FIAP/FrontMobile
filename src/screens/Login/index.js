@@ -2,16 +2,16 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import React, { useState } from "react";
 import {
-    Image,
-    SafeAreaView,
-    Text,
-    TextInput,
-    ToastAndroid,
-    TouchableOpacity,
-    View
+  Image,
+  SafeAreaView,
+  Text,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+  View
 } from "react-native";
 
-import {styles} from "./styles";
+import { styles } from "./styles";
 
 
 import Botao from "../../components/Button";
@@ -68,11 +68,8 @@ export default function Login({ navigation }) {
       return;
     }
 
-    navigation.navigate("Menu");
+    navigation.navigate("Nav");
   };
-
-  const [isChecked, setChecked] = useState(false);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logo}>
@@ -153,11 +150,11 @@ export default function Login({ navigation }) {
 
       <View style={styles.containerCadastro}>
         <Text style={styles.textoRodape}> Não possui conta? <Text
-            style={styles.textoLink}
-            onPress={() => navigation.navigate("Register")}
-          >
-              Criar conta
-          </Text>
+          style={styles.textoLink}
+          onPress={() => navigation.navigate("Register")}
+        >
+          Criar conta
+        </Text>
         </Text>
       </View>
     </SafeAreaView>
