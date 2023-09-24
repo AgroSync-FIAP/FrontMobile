@@ -7,6 +7,7 @@ import SoloAnalysis from '../screens/SoloAnalysis/index';
 import Chat from '../screens/Chat/index';
 
 import { MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native';
 //import IconTabBar from './IconTabBar';
 
 const Tab = createBottomTabNavigator();
@@ -24,7 +25,7 @@ export default function Nav() {
                     height: 55,
                     fontColor: "#204721",
                 },
-                tabBarActiveTintColor: "#c6ccc5",
+                tabBarActiveTintColor: "#ffffff",
                 tabBarInactiveTintColor: "#204721",
                 tabBarItemStyle: {
                     paddingBottom: 5,
@@ -97,3 +98,10 @@ export default function Nav() {
         </Tab.Navigator>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#902323',
+    },
+  });

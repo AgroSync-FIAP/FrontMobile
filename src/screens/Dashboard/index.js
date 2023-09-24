@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
       alignItems: "flex-start",
       paddingTop: 100,
-      backgroundColor: "#c6ccc5",
+      backgroundColor: "#ffffff",
       padding: windowHeight * 0.1, 
     },
     specsAI: {

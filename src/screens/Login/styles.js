@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
       justifyContent: "center",
       fontFamily: Platform.OS === "ios" ? "AvenirNext-Regular" : "Roboto",
       padding: 5,
-      backgroundColor: "#c6ccc5",
+      backgroundColor: "#ffffff",
     },
     logo: {
       alignItems: "center",

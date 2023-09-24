@@ -56,9 +56,9 @@ export default function Chat() {
   return (
     <View style={styles.container}>
       <View style={styles.headerSection}>
-        <Text style={styles.headerText}>LaVerdinhaChat</Text>
+        <Text style={styles.headerText}>Syncler Chat</Text>
         <Text style={styles.descriptionText}>
-          Olá, eu sou a verdinha, como posso te ajudar?
+          Olá, eu sou a Syncler assistente virtual da AgroSync, como posso te ajudar?
         </Text>
       </View>
 
@@ -90,9 +90,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     marginTop: 80,
+    color: '#40a742',
   },
   descriptionText: {
     fontSize: 16,
+    color: '#21593B',
   },
   chatContainer: {
     flexGrow: 1,
