@@ -1,57 +1,63 @@
-import Constants from 'expo-constants';
-import { Configuration, OpenAIApi } from 'openai';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import FormSection from '../../components/FormSection';
+import { ScrollView, StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import axios from 'axios';
 
 export default function Chat() {
   const [storedValues, setStoredValues] = useState([]);
-  const apiKey = process.env.EXPO_PUBLIC_API_KEY; 
+  const [inputText, setInputText] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [isChatGPTProcessing, setIsChatGPTProcessing] = useState(false);
+  const [thinkingMessage, setThinkingMessage] = useState('');
 
-  const generateResponse = async (newQuestion, setNewQuestion) => { 
+  const apiKey = process.env.EXPO_PUBLIC_API_KEY;
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+  const sendMessageToChatGPT = async () => {
+    if (inputText.trim() === '') return;
+
     try {
-      const configuration = new Configuration({
-        apiKey: apiKey,
-        basePath: 'https://api.openai.com/v1',
+
+      setIsChatGPTProcessing(true);
+      setThinkingMessage('Pensando...');
+      const payload = {
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "user",
+            content: inputText,
+          },
+        ],
+      };
+
+      const response = await axios.post(apiUrl, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
       });
 
-      const openai = new OpenAIApi(configuration);
+      const reply = response.data.choices[0].message.content;
 
-      const options = {
-        model: 'text-davinci-003',
-        temperature: 0,
-        max_tokens: 100,
-        top_p: 1,
-        frequency_penalty: 0.0,
-        presence_penalty: 0.0,
-        stop: ['/'],
-      };
+      // console.log(response.data.choices[0].message.content)
 
-      const completeOptions = {
-        ...options,
-        prompt: newQuestion,
-      };
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: inputText, isUser: true },
+        { text: reply, isUser: false },
+      ]);
 
-      const queryString = Object.entries(completeOptions)
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&');
-
-      const response = await openai.createCompletion(queryString);
-
-      if (response.data.choices) {
-        setStoredValues([
-          {
-            question: newQuestion,
-            answer: response.data.choices[0].text,
-          },
-          ...storedValues,
-        ]);
-        setNewQuestion('');
-      }
+      setInputText('');
     } catch (error) {
-      console.error('Erro ao gerar a resposta:', error);
+      console.error('Erro ao enviar mensagem:', error);
+    } finally {
+      setIsChatGPTProcessing(false); 
+      setThinkingMessage('');
     }
   };
+
+  const sendToHeaven = () => {
+    setResp(inputText)
+  }
 
   return (
     <View style={styles.container}>
@@ -65,13 +71,34 @@ export default function Chat() {
       <ScrollView style={styles.chatContainer}>
         {storedValues.map((value, index) => (
           <View key={index} style={styles.messageContainer}>
-            <Text style={styles.questionText}>{value.question}</Text>
+            <Text style={styles.questionText} >{value.question}</Text>
             <Text style={styles.answerText}>{value.answer}</Text>
+          </View>
+        ))}
+        {messages.map((message, index) => (
+          <View key={index} style={styles.messageContainer}>
+            <Text style={message.isUser ? styles.userText : styles.chatGPTText}>
+              {message.text}
+            </Text>
           </View>
         ))}
       </ScrollView>
 
-      <FormSection generateResponse={generateResponse} />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.inputText}
+          placeholder="Digite sua mensagem"
+          value={inputText}
+          onChangeText={setInputText}
+        />
+        {thinkingMessage ? <Text style={styles.thinkingText}>{thinkingMessage}</Text> : null}
+        <Button
+          title="Enviar"
+          onPress={sendMessageToChatGPT}
+          disabled={isChatGPTProcessing}
+        // onPress={sendToHeaven}
+        />
+      </View>
     </View>
   );
 }
@@ -107,5 +134,26 @@ const styles = StyleSheet.create({
   },
   answerText: {
     marginTop: 5,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    paddingTop: 10,
+  },
+  inputText: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+  },
+  userText: {
+    fontWeight: 'bold',
+    textAlign: 'right',
+  },
+  chatGPTText: {
+    textAlign: 'left',
   },
 });
