@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
+import { Loading } from '../../components/Loading/index';
 
 export default function Chat() {
   const [storedValues, setStoredValues] = useState([]);
@@ -9,6 +9,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [isChatGPTProcessing, setIsChatGPTProcessing] = useState(false);
   const [thinkingMessage, setThinkingMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const apiKey = process.env.EXPO_PUBLIC_API_KEY;
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -18,8 +19,9 @@ export default function Chat() {
 
     try {
 
-      setIsChatGPTProcessing(true);
-      setThinkingMessage('Pensando...');
+      // setIsChatGPTProcessing(true);
+      setIsLoading(true);
+      // setThinkingMessage('Pensando...');
       const payload = {
         model: "gpt-3.5-turbo",
         messages: [
@@ -50,7 +52,8 @@ export default function Chat() {
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error);
     } finally {
-      setIsChatGPTProcessing(false);
+      // setIsChatGPTProcessing(false);
+      setIsLoading(false);
       setThinkingMessage('');
     }
   };
@@ -89,13 +92,14 @@ export default function Chat() {
         />
         {thinkingMessage ? <Text style={styles.thinkingText}>{thinkingMessage}</Text> : null}
 
-        <TouchableOpacity
-          onPress={sendMessageToChatGPT}
-          disabled={isChatGPTProcessing}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Enviar</Text>
-        </TouchableOpacity>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <TouchableOpacity onPress={sendMessageToChatGPT} disabled={isLoading} style={styles.button}>
+            <Text style={styles.buttonText}>Enviar</Text>
+          </TouchableOpacity>
+        )}
+
       </View>
     </View>
   );
