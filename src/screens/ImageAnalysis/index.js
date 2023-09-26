@@ -83,7 +83,7 @@ export function Home() {
           },
         }
       );
-  
+
       const cultivos = response.data.outputs[0].data.concepts.map((concept) => {
         return {
           name: concept.name,
@@ -106,45 +106,45 @@ export function Home() {
   }
 
   return (
-    <View style={styles.container}>
-      <Button onPress={handleSelectImage} disabled={isLoading}/>
+    <SafeAreaView>
+      <View style={styles.container}>
+        <Button onPress={handleSelectImage} disabled={isLoading} />
 
-      {
-        selectedImageUri ?
-          <Image
-            source={{ uri: selectedImageUri }}
-            style={styles.image}
-            resizeMode="cover"
-          />
-          :
-          <Text style={styles.description}>
-            Selecione a foto do seu prato para analisar.
-          </Text>
-      }
-
-      <View style={styles.bottom}>
         {
-          isLoading ? <Loading /> :
-            <>
-              {message && <Tip message={message} />}
-
-              <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 24 }}>
-                <View style={styles.items}>
-                  {
-                    items.map((item) => (
-                      <Item key={item.name} data={item} />
-                    ))
-                  }
-                </View>
-              </ScrollView>
-            </>
+          selectedImageUri ?
+            <Image
+              source={{ uri: selectedImageUri }}
+              style={styles.image}
+              resizeMode="cover"
+            />
+            :
+            <Text style={styles.description}>
+              Selecione a foto do seu prato para analisar.
+            </Text>
         }
+
+        <View style={styles.bottom}>
+          {
+            isLoading ? <Loading /> :
+              <>
+                {message && <Tip message={message} />}
+
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 24 }}>
+                  <View style={styles.items}>
+                    {
+                      items.map((item) => (
+                        <Item key={item.name} data={item} />
+                      ))
+                    }
+                  </View>
+                </ScrollView>
+              </>
+          }
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
-
-
 export default ImageAnalysis;
 
 

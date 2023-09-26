@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Loading } from '../../components/Loading/index';
 
 export default function Chat() {
@@ -59,49 +59,49 @@ export default function Chat() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerSection}>
-        <Text style={styles.headerText}>Syncler Chat</Text>
-        <Text style={styles.descriptionText}>
-          Olá, eu sou a Syncler assistente virtual da AgroSync, como posso te ajudar?
-        </Text>
+      <View style={styles.container}>
+        <View style={styles.headerSection}>
+          <Text style={styles.headerText}>Syncler Chat</Text>
+          <Text style={styles.descriptionText}>
+            Olá, eu sou a Syncler assistente virtual da AgroSync, como posso te ajudar?
+          </Text>
+        </View>
+
+        <ScrollView style={styles.chatContainer}>
+          {storedValues.map((value, index) => (
+            <View key={index} style={styles.messageContainer}>
+              <Text style={styles.questionText} >{value.question}</Text>
+              <Text style={styles.answerText}>{value.answer}</Text>
+            </View>
+          ))}
+          {messages.map((message, index) => (
+            <View key={index} style={styles.messageContainer}>
+              <Text style={message.isUser ? styles.userText : styles.chatGPTText}>
+                {message.text}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Digite sua mensagem"
+            value={inputText}
+            onChangeText={setInputText}
+          />
+          {thinkingMessage ? <Text style={styles.thinkingText}>{thinkingMessage}</Text> : null}
+
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <TouchableOpacity onPress={sendMessageToChatGPT} disabled={isLoading} style={styles.button}>
+              <Text style={styles.buttonText}>Enviar</Text>
+            </TouchableOpacity>
+          )}
+
+        </View>
       </View>
-
-      <ScrollView style={styles.chatContainer}>
-        {storedValues.map((value, index) => (
-          <View key={index} style={styles.messageContainer}>
-            <Text style={styles.questionText} >{value.question}</Text>
-            <Text style={styles.answerText}>{value.answer}</Text>
-          </View>
-        ))}
-        {messages.map((message, index) => (
-          <View key={index} style={styles.messageContainer}>
-            <Text style={message.isUser ? styles.userText : styles.chatGPTText}>
-              {message.text}
-            </Text>
-          </View>
-        ))}
-      </ScrollView>
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Digite sua mensagem"
-          value={inputText}
-          onChangeText={setInputText}
-        />
-        {thinkingMessage ? <Text style={styles.thinkingText}>{thinkingMessage}</Text> : null}
-
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <TouchableOpacity onPress={sendMessageToChatGPT} disabled={isLoading} style={styles.button}>
-            <Text style={styles.buttonText}>Enviar</Text>
-          </TouchableOpacity>
-        )}
-
-      </View>
-    </View>
   );
 }
 

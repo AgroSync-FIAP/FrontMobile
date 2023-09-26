@@ -2,6 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 
 import Dashboard from '../screens/Dashboard/index';
+import Teste from '../screens/Teste/index';
+import WeatherWidget from '../screens/WeatherWidget/index';
 // import ImageAnalysis from '../screens/ImageAnalysis/index';
 import SoloAnalysis from '../screens/SoloAnalysis/index';
 import Chat from '../screens/Chat/index';
@@ -34,7 +36,7 @@ export default function Nav() {
             }}
         >
 
-            <Tab.Screen name='Dashboard' component={Dashboard}
+            <Tab.Screen name='Teste' component={Teste}
                 options={{
                     tabBarLabel: 'Inicio',
                     tabBarIcon: ({ color, size }) => (
@@ -76,6 +78,16 @@ export default function Nav() {
                 }}
             />
 
+            <Tab.Screen name='WeatherWidget' component={WeatherWidget}
+                options={{
+                    tabBarLabel: 'WeatherWidget',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons name="room" size={size} color={color} />
+                    ),
+                    headerShown: false,
+                }}
+            />
+
 
             {/* <Tab.Screen name='Cam' component={Can}
                 options={{
@@ -101,7 +113,7 @@ export default function Nav() {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#902323',
+        flex: 1,
+        backgroundColor: '#902323',
     },
-  });
+});
