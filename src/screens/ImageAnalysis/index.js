@@ -1,185 +1,102 @@
-import React, { useState } from 'react';
-import { Alert, Image, ScrollView, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Image, StyleSheet, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as ImageManipulator from 'expo-image-manipulator';
-import axios from 'axios';
+import Header from '../../components/Header';
+import Botao from "../../components/Button";
 
-import { api } from '../../screens/service/ApiClarifai';
-import { farmcontainer } from '../../screens/utils/farmcontainer';
+const ImageAnalysis = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
 
-import { Tip } from '../../components/Tip/index';
-import { Item } from '../../components/Item/index';
-import { Button } from '../../components/Button';
-import { Loading } from '../../components/Loading/index';
-
-export function Home() {
-  const [selectedImageUri, setSelectedImageUri] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [items, setItems] = useState([]);
-  const [message, setMessage] = useState('');
-
-  async function handleSelectImage() {
-    try {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
-      if (status !== ImagePicker.PermissionStatus.GRANTED) {
-        return Alert.alert("É necessário acessar a galeria");
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Desculpe, precisamos das permissões de acesso à câmera e à galeria para funcionar!');
       }
+    })();
+  }, []);
 
-      setIsLoading(true);
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-      const response = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 4],
-        quality: 1
-      });
-
-      if (response.cancelled) {
-        return setIsLoading(false);
-      }
-
-      if (!response.cancelled) {
-        const imgManipulated = await ImageManipulator.manipulateAsync(
-          response.assets[0].uri,
-          [{ resize: { width: 900 } }],
-          {
-            compress: 1,
-            format: ImageManipulator.SaveFormat.JPEG,
-            base64: true
-          }
-        );
-        setSelectedImageUri(imgManipulated.uri);
-        farmDetect(imgManipulated.base64);
-      }
-    } catch (error) {
-      console.log(error);
+    if (!result.cancelled) {
+      setSelectedImage(result.uri);
     }
-  }
+  };
 
-  async function farmDetect(imageBase64) {
-    try {
-      const response = await axios.post(
-        `https://api.clarifai.com/v2/models/${process.env.EXPO_PUBLIC_API_MODEL_ID}/versions/${process.env.EXPO_PUBLIC_API_MODEL_VERSION_ID}/outputs`,
-        {
-          user_app_id: {
-            user_id: process.env.EXPO_PUBLIC_API_USER_ID,
-            app_id: process.env.EXPO_PUBLIC_API_APP_ID,
-          },
-          inputs: [
-            {
-              data: {
-                image: {
-                  base64: imageBase64,
-                },
-              },
-            },
-          ],
-        },
-        {
-          headers: {
-            'Authorization': 'Key ' + 'c71bb035823d4f9c86e2fd1238ba3f5e', // Substitua 'YOUR_PAT_HERE' pelo seu PAT
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-      const cultivos = response.data.outputs[0].data.concepts.map((concept) => {
-        return {
-          name: concept.name,
-          percentage: `${Math.round(concept.value * 100)}%`
-        }
-      });
-
-      const isFarm = farmcontainer(cultivos, 'farm');
-      //setMessage(isFarm ? ``: 'Não é fazenda ou cultivo!');
-      //setMessage(isFarm ? ``: 'Não é fazenda ou cultivo!');
-      setMessage(isFarm ? 'Adicione fertilizante' : 'Não é fazenda ou cultivo!');
-
-      setItems(cultivos);
-      setIsLoading(false);
-
-    } catch (error) {
-      console.error('Error:', error);
-      setIsLoading(false);
+    if (!result.cancelled) {
+      setSelectedImage(result.uri);
     }
-  }
+  };
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Button onPress={handleSelectImage} disabled={isLoading} />
+    <View style={styles.container}>
+      <Header title="Galeria" />
+      <Botao texto="Selecione a foto" funcao={pickImage} />
+      <Botao texto="Tirar Foto" funcao={takePhoto} />
 
-        {
-          selectedImageUri ?
-            <Image
-              source={{ uri: selectedImageUri }}
-              style={styles.image}
-              resizeMode="cover"
-            />
-            :
-            <Text style={styles.description}>
-              Selecione a foto do seu prato para analisar.
-            </Text>
-        }
+      {selectedImage && <Image source={{ uri: selectedImage }} style={styles.image} />}
 
-        <View style={styles.bottom}>
-          {
-            isLoading ? <Loading /> :
-              <>
-                {message && <Tip message={message} />}
-
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 24 }}>
-                  <View style={styles.items}>
-                    {
-                      items.map((item) => (
-                        <Item key={item.name} data={item} />
-                      ))
-                    }
-                  </View>
-                </ScrollView>
-              </>
-          }
+      <ScrollView contentContainerStyle={styles.scroll} horizontal={false}>
+        <View style={styles.row}>
+          <Image source={require("../../../assets/imagemTest/download.jpeg")} resizeMode="stretch" style={styles.smallImage} />
+          <Image source={require("../../../assets/imagemTest/images3.jpeg")} resizeMode="stretch" style={styles.smallImage} />
         </View>
-      </View>
-    </SafeAreaView>
+        <View style={styles.row}>
+          <Image source={require("../../../assets/imagemTest/images7.jpeg")} resizeMode="stretch" style={styles.smallImage} />
+          <Image source={require("../../../assets/imagemTest/images5.jpeg")} resizeMode="stretch" style={styles.smallImage} />
+        </View>
+        <View style={styles.row}>
+          <Image source={require("../../../assets/imagemTest/images.jpeg")} resizeMode="stretch" style={styles.smallImage} />
+          <Image source={require("../../../assets/imagemTest/images2.jpeg")} resizeMode="stretch" style={styles.smallImage} />
+        </View>
+        <View style={styles.row}>
+          <Image source={require("../../../assets/imagemTest/images4.jpeg")} resizeMode="stretch" style={styles.smallImage} />
+        </View>
+      </ScrollView>
+    </View>
   );
-}
-export default ImageAnalysis;
-
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF"
-  },
-  description: {
-    color: "#2E9D4C",
-    fontFamily: "Poppins_400Regular",
-    textAlign: "center",
-    fontSize: 14,
-    flex: 1,
-    textAlignVertical: "center"
-  },
-  content: {
-    flex: 1,
-  },
-  bottom: {
-    flex: 1,
-    backgroundColor: "#D9D9D9",
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    paddingHorizontal: 24,
-    marginTop: -42,
-    paddingTop: 12
-  },
-  items: {
-    flex: 1,
-    gap: 12
+    marginTop: 50,
+    backgroundColor: '#ffffff',
+    //paddingHorizontal: 4,
   },
   image: {
-    flex: 1
+    width: '100%',
+    height: 200,
+    marginTop: 20,
+  },
+  scroll: {
+    flexDirection: 'column', 
+    alignItems: 'center', 
+  },
+  row: {
+    flexDirection: 'row', 
+    marginVertical: 10, 
+  },
+  smallImage: {
+    flex: 1,
+    height: 200,
+    margin: 2,
+    borderRadius: 10,
   },
 });
 
-
+export default ImageAnalysis;

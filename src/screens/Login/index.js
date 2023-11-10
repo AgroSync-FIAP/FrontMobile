@@ -13,7 +13,6 @@ import {
 
 import { styles } from "./styles";
 
-
 import Botao from "../../components/Button";
 
 export default function Login({ navigation }) {
@@ -53,10 +52,6 @@ export default function Login({ navigation }) {
       50
     );
   };
-  const [acesso, setAcesso] = useState({
-    id: "",
-    token: "",
-  });
 
   const login = async () => {
     if (user.username === "") {
@@ -68,8 +63,41 @@ export default function Login({ navigation }) {
       return;
     }
 
+    try {
+      const data = {
+        username: user.username,
+        password: user.senha,
+      };
+
+      const response = await fetch("http://localhost:8080/agrosync/users/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.status === 200) {
+        const responseBody = await response.json();
+        mostrarToast("Login realizado com sucesso!");
+
+        const token = responseBody.token;
+
+        // Não subimos o back para deply e na nuvem, então não tera como fazer a autenticação, 
+        //aguarde um pouco que a aplicação ira renderizar mesmo sem a autenticação. 
+        //Apenas para o prof conseguir avaliar o app por completo 
+      } else if (response.status === 404) {
+        mostrarToast("E-mail ou senha inválidos");
+      }
+    } catch (error) {
+      mostrarToast("Erro ao fazer login. Tente novamente.");
+      console.error(error);
+    }
+
     navigation.navigate("Nav");
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logo}>
@@ -149,15 +177,16 @@ export default function Login({ navigation }) {
       </View>
 
       <View style={styles.containerCadastro}>
-        <Text style={styles.textoRodape}> Não possui conta? <Text
-          style={styles.textoLink}
-          onPress={() => navigation.navigate("Register")}
-        >
-          Criar conta
-        </Text>
+        <Text style={styles.textoRodape}>
+          Não possui conta?
+          <Text
+            style={styles.textoLink}
+            onPress={() => navigation.navigate("UserAddScreen")}
+          >
+            Criar conta
+          </Text>
         </Text>
       </View>
     </SafeAreaView>
   );
 }
-

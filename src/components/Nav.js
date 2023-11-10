@@ -2,22 +2,20 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 
 import Dashboard from '../screens/Dashboard/index';
-import Teste from '../screens/Teste/index';
 import WeatherWidget from '../screens/WeatherWidget/index';
-// import ImageAnalysis from '../screens/ImageAnalysis/index';
-import SoloAnalysis from '../screens/SoloAnalysis/index';
+import SupplyChain from '../screens/SuplayChain/index';
 import Chat from '../screens/Chat/index';
+import SoloAnalysis from '../screens/SoloAnalysis/index';
+import ImageAnalysis from '../screens/ImageAnalysis/index';
 
-import { MaterialIcons } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
-//import IconTabBar from './IconTabBar';
+import { MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { SafeAreaView, StyleSheet } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 export default function Nav() {
     return (
         <Tab.Navigator
-            //initialRouteName="DashScreen"
             screenOptions={{
                 tabBarStyle: {
                     backgroundColor: "#40a742",
@@ -35,8 +33,7 @@ export default function Nav() {
                 },
             }}
         >
-
-            <Tab.Screen name='Teste' component={Teste}
+            <Tab.Screen name='Dashboard' component={Dashboard}
                 options={{
                     tabBarLabel: 'Inicio',
                     tabBarIcon: ({ color, size }) => (
@@ -46,15 +43,25 @@ export default function Nav() {
                 }}
             />
 
-            {/* <Tab.Screen name='ImageAnalysis' component={ImageAnalysis}
+            <Tab.Screen name='ImageAnalysis' component={ImageAnalysis}
                 options={{
-                    tabBarLabel: 'imageAnalysis',
+                    tabBarLabel: 'Galeria',
                     tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons name="image" size={size} color={color} />
+                        <MaterialIcons name="collections" size={size} color={color} />
                     ),
                     headerShown: false,
                 }}
-            /> */}
+            />
+
+            <Tab.Screen name='SupplyChain' component={SupplyChain}
+                options={{
+                    tabBarLabel: 'Supply Chain',
+                    tabBarIcon: ({ color, size }) => (
+                        <AntDesign name="CodeSandbox" size={size} color={color} />
+                    ),
+                    headerShown: false,
+                }}
+            />
 
             <Tab.Screen name='SoloAnalysis' component={SoloAnalysis}
                 options={{
@@ -65,9 +72,6 @@ export default function Nav() {
                     headerShown: false,
                 }}
             />
-
-
-
             <Tab.Screen name='Chat' component={Chat}
                 options={{
                     tabBarLabel: 'Chat',
@@ -80,40 +84,14 @@ export default function Nav() {
 
             <Tab.Screen name='WeatherWidget' component={WeatherWidget}
                 options={{
-                    tabBarLabel: 'WeatherWidget',
+                    tabBarLabel: 'Localização',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialIcons name="room" size={size} color={color} />
                     ),
                     headerShown: false,
                 }}
             />
-
-
-            {/* <Tab.Screen name='Cam' component={Can}
-                options={{
-                    tabBarLabel: 'Camera',
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons name="photo-camera" size={size} color={color} />
-                    ),
-                    headerShown: false,
-                }}
-            /> */}
-            {/* <Tab.Screen name='Resultado' component={ResultadoScreen}
-                options={{
-                    tabBarLabel: 'Resultado',
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons name="person" size={size} color={color} />
-                    ),
-                    headerShown: false,
-                }}
-            /> */}
         </Tab.Navigator>
+
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#902323',
-    },
-});

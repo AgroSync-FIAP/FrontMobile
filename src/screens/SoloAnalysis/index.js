@@ -7,21 +7,22 @@ export default function SoloAnalysis() {
 
   const iniciarLeituraUmidade = async () => {
     try {
+      console.log("Valor de umidade enviado:", umidade);
       const response = await fetch('http://192.168.0.18:5000/atualizar-sensor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ umidade: 0 }),
+        body: JSON.stringify({ umidade }),
       });
-
       const data = await response.json();
-
       if (data.message === 'ligar_rele') {
         console.log('Relé ligado!');
       } else if (data.message === 'desligar_rele') {
         console.log('Relé desligado!');
       }
+
+      buscarUmidadeAtual();
     } catch (error) {
       console.error(error);
     }
@@ -34,7 +35,6 @@ export default function SoloAnalysis() {
 
       console.log(data.umidade);
       setUmidade(data.umidade);
-      console.log(data.umidade);
     } catch (error) {
       console.error(error);
     }
@@ -65,13 +65,12 @@ export default function SoloAnalysis() {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', // Preencher toda a tela
+    resizeMode: 'cover', 
     justifyContent: 'center',
   },
   container: {
     flex: 1,
     flexDirection: 'row',
-    //backgroundColor: 'rgba(255, 255, 255, 0.7)', // Cor de fundo com transparência
   },
   rightPanel: {
     flex: 1,
@@ -106,37 +105,3 @@ const styles = StyleSheet.create({
   },
 });
 
-
-{/* 
-height: "10%",
-    width: "100%",
-    padding: "9%",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#40a742",
-    borderRadius: 15,
-    //marginTop: "10%",
-    alignSelf: "center",
-    left: 80,
-
-
-
-<View style={styles.container}>
-<View style={styles.leftPanel}>
-  <Image source={require('../../../assets/solo4.png')} style={styles.image} />
-</View>
-<View style={styles.rightPanel}>
-  <View style={styles.middlePanel}>
-    <Text style={styles.umidadeText}>
-      Umidade Atual: {umidade !== null ? `${umidade}%` : 'N/A'}
-    </Text>
-    <TouchableOpacity style={styles.button} onPress={iniciarLeituraUmidade}>
-      <Text style={styles.textButton}> Verificar Umidade</Text>
-    </TouchableOpacity>
-    {/* <Button title="Iniciar Leitura de Umidade" onPress={iniciarLeituraUmidade} />
-    <Botao texto="Conferir Umidade" funcao={iniciarLeituraUmidade} /> 
-  </View>
-
-  <Image source={require('../../../assets/solo4.png')} style={styles.image} /> 
-</View>
-</View> */}

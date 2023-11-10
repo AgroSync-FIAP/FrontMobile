@@ -14,6 +14,7 @@ export function Item({ data }) {
     </View>
   );
 }
+ 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -40,3 +41,5 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
 });
+
+export default Item;
