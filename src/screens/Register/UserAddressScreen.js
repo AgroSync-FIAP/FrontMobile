@@ -79,7 +79,7 @@ export default function UserAddressScreen({ navigation, route }) {
             };
             console.log(JSON.stringify(data, null, 2));
 
-            const response = await axios.post('http://192.168.0.18:8080/agrosync/users/add', data);
+            const response = await axios.post('http://192.168.0.18:8080/agrosync/users', data);
             0
             if (response.status === 201) {
                 mostrarToast('Cadastro realizado com sucesso!');

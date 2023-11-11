@@ -36,7 +36,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="SuplayChain"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Home" component={Home} />
