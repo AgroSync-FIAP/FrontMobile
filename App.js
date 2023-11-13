@@ -2,11 +2,8 @@ import { LogBox } from 'react-native';
 
 LogBox.ignoreLogs(['Network request failed']);
 
-
-// Variável para rastrear se a mensagem já foi exibida
 let networkRequestFailedLogged = false;
 
-// Função para ignorar o aviso após a primeira exibição
 const ignoreNetworkRequestFailed = () => {
   if (!networkRequestFailedLogged) {
     LogBox.ignoreLogs(['Network request failed']);
@@ -14,7 +11,7 @@ const ignoreNetworkRequestFailed = () => {
   }
 };
 
-// Adicione isso antes de qualquer outro código relevante no seu arquivo principal (ex: index.js ou App.js)
+
 ignoreNetworkRequestFailed();
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -77,8 +74,6 @@ export default function App() {
         <Stack.Screen name="Nav" component={Nav} />
         <Stack.Screen name="Maps" component={Maps} />
         <Stack.Screen name="FormSection" component={FormSection} />
-        {/* <Stack.Screen name="Item" component={Item} />
-        <Stack.Screen name="Loading" component={Loading} /> */}
 
       </Stack.Navigator>
     </NavigationContainer>
