@@ -88,12 +88,14 @@ const SupplyChain = () => {
       <Text style={styles.text}>{item.qtdProduzida}</Text>
       <Text style={styles.text}>{item.qtdExportada}</Text>
       <Text style={styles.text}>{item.qtdPerdida}</Text>
-      <TouchableOpacity onPress={() => handleEdit(item.id)}>
-        <Text style={styles.editButton}>Editar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleDelete(item.id)}>
-        <Text style={styles.deleteButton}>Excluir</Text>
-      </TouchableOpacity>
+      <View style={styles.itemContainerAcao}>
+        <TouchableOpacity onPress={() => handleEdit(item.id)}>
+          <Text style={styles.editButton}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleDelete(item.id)}>
+          <Text style={styles.deleteButton}>Excluir</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -105,9 +107,9 @@ const SupplyChain = () => {
         await axios.post('http://192.168.0.18:8080/agrosync/suplychain', newItemData);
       }
       console.log('Item salvo com sucesso');
-      fetchSupplyChainData(); 
+      fetchSupplyChainData();
       setCreateModalVisible(false);
-      setSelectedItem(null); 
+      setSelectedItem(null);
     } catch (error) {
       console.error('Erro ao salvar o item:', error);
     }
@@ -118,19 +120,21 @@ const SupplyChain = () => {
       <Header title="Controle de Supply Chain" />
       <View style={styles.table}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>ID</Text>
+          <Text style={styles.headerTextAcao}>ID</Text>
           <Text style={styles.headerText}>Qtd Produzida</Text>
           <Text style={styles.headerText}>Qtd Exportada</Text>
           <Text style={styles.headerText}>Qtd Perdida</Text>
-          <Text style={styles.headerText}>Ações</Text>
+          <Text style={styles.headerTextAcao}>Ações</Text>
         </View>
 
         <FlatList
           data={supplyChainData}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-        />
+          />
       </View>
+
+
 
       {/* Modal para edição */}
       <Modal visible={isCreateModalVisible} transparent animationType="slide">
@@ -185,33 +189,41 @@ const styles = StyleSheet.create({
   table: {
     margin: 20,
     padding: 8,
-    //borderWidth: 1,
-    //borderColor: '#15440B',
   },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: 15,
     borderBottomWidth: 1,
     borderRadius: 10,
-
+    lineHeight: 1.5,
     backgroundColor: '#15440B',
   },
   itemContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#440b29',
+    padding: 2,
+    borderBottomWidth: 2,
+    borderBottomColor: '#15440B',
+    //backgroundColor: '#b62271',
+    justifyContent: 'space-between',
+    borderRadius: 10,
+  },
+  itemContainerAcao:{
+
+
   },
   text: {
-    flex: 1,
+    //flex: 1,
+    left: 30,
     fontSize: 12,
     textAlign: 'center',
   },
-  textId:{
+  textId: {
+    fontSize: 12,
+    textAlign: 'center',
     color: '#bab8b8',
 
   },
@@ -219,6 +231,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     fontSize: 12,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  headerTextAcao: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 14,
+    padding: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,
@@ -248,7 +270,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 10,
   },
-  modalButtom:{
+  modalButtom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     justifyItems: 'center',
@@ -271,7 +293,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
   },
-  editButton:{
+  editButton: {
     alignItems: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -281,7 +303,7 @@ const styles = StyleSheet.create({
     color: "#40a742",
     marginRight: 10,
   },
-  deleteButton:{
+  deleteButton: {
     alignItems: "center",
     justifyContent: "center",
     alignItems: "center",

@@ -49,9 +49,16 @@ export default function SoloAnalysis() {
       <View style={styles.container}>
         <View style={styles.rightPanel}>
           <View style={styles.middlePanel}>
-            <Text style={styles.umidadeText}>
-              Umidade Atual: {umidade !== null ? `${umidade}%` : 'N/A'}
-            </Text>
+            <View>
+              <Text style={styles.umidadeText}>
+                Nivel de Umidade
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.umidadeText}>
+                 {umidade !== null ? `${umidade}` : 'N/A'}
+              </Text>
+            </View>
             <TouchableOpacity style={styles.button} onPress={iniciarLeituraUmidade}>
               <Text style={styles.textButton}>Verificar Umidade</Text>
             </TouchableOpacity>
@@ -65,7 +72,7 @@ export default function SoloAnalysis() {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', 
+    resizeMode: 'cover',
     justifyContent: 'center',
   },
   container: {
@@ -80,6 +87,7 @@ const styles = StyleSheet.create({
   middlePanel: {
     justifyContent: 'center',
     alignItems: 'center',
+    left: 20,
   },
   umidadeText: {
     fontSize: 20,

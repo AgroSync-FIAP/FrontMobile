@@ -91,8 +91,8 @@ export default function Login({ navigation }) {
         mostrarToast("E-mail ou senha inválidos");
       }
     } catch (error) {
-      mostrarToast("Erro ao fazer login. Tente novamente.");
-      console.error(error);
+      //mostrarToast("Erro ao fazer login. Tente novamente.");
+      //console.error(error);
     }
 
     navigation.navigate("Nav");
